@@ -1,11 +1,11 @@
 import { Book } from "./book.model";
 
 export interface Playlist {
-    id: string;
+    id?: string;
     title: string;
     description?: string;
     author: string;
-    books: Book[];
+    books?: Book[];
 }
 
 export interface PlaylistCreate {

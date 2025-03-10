@@ -1,16 +1,25 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Book } from "@/models/book.model";
-import { Playlist, PlaylistCreate } from "@/models/playlist.model";
+import { Book } from "@/app/models/book.model";
+import { Playlist, PlaylistCreate } from "@/app/models/playlist.model";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { PlaylistCard } from "./playlist-card";
 import { CreatePlaylistDialog } from "./create-playlist-dialog";
 import { PlaylistDetails } from "./playlist-details";
+import { useAllPlaylists } from "./hooks/all-playlists";
+import { useCreatePlaylist } from "./hooks/create-playlist";
+import { useSaveBook } from "../book/hooks/save-book";
+import { createData } from "@/lib/utils";
 
 export function Playlists() {
-    const [playlists, setPlaylists] = useState<Playlist[]>([]);
+    const { data: allPlaylists } = useAllPlaylists();
+
+    const { mutate: createPlaylist } = useCreatePlaylist();
+    const { mutate: saveBook } = useSaveBook();
+
+    const [playlists, setPlaylists] = useState<Playlist[]>(allPlaylists ?? []);
     const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
     const [isCreatingDialogOpen, setIsCreatingDialogOpen] = useState(false);
 
@@ -20,15 +29,23 @@ export function Playlists() {
         }
         setPlaylists([...playlists, newPlaylist]);
         setIsCreatingDialogOpen(false);
+
+        createPlaylist(playlist);
     }
 
     function handleAddBook(playlistId: string, book: Book) {
+        const newBook = createData<Book>({
+            ...book,
+            playlistId: playlistId,
+        });
+        saveBook(newBook);
+
         setPlaylists(
             playlists.map((playlist) => {
                 if (playlist.id === playlistId) {
                     return {
                         ...playlist,
-                        books: [...playlist.books, book],
+                        books: [...playlist.books ?? [], book],
                     };
                 }
                 return playlist;
@@ -38,7 +55,7 @@ export function Playlists() {
         if (selectedPlaylist?.id === playlistId) {
             setSelectedPlaylist({
                 ...selectedPlaylist,
-                books: [...selectedPlaylist.books, book],
+                books: [...selectedPlaylist.books!, book],
             });
         }
     }
@@ -49,7 +66,7 @@ export function Playlists() {
                 if (playlist.id === playlistId) {
                     return {
                         ...playlist,
-                        books: playlist.books.filter((book) => book.id !== bookId),
+                        books: playlist.books ? playlist.books.filter((book) => book.id !== bookId) : [],
                     };
                 }
                 return playlist;
@@ -59,7 +76,7 @@ export function Playlists() {
         if (selectedPlaylist?.id === playlistId) {
             setSelectedPlaylist({
                 ...selectedPlaylist,
-                books: selectedPlaylist.books.filter((book) => book.id !== bookId),
+                books: selectedPlaylist.books ? selectedPlaylist.books.filter((book) => book.id !== bookId) : [],
             });
         }
     }
@@ -74,9 +91,8 @@ export function Playlists() {
                         Nova Playlist
                     </Button>
                 </div>
-
                 <div className="space-y-4">
-                    {playlists.map((playlist) => (
+                    {allPlaylists && allPlaylists.map((playlist) => (
                         <PlaylistCard
                             key={playlist.id}
                             playlist={playlist}
@@ -85,9 +101,9 @@ export function Playlists() {
                         />
                     ))}
 
-                    {playlists.length === 0 && (
+                    {allPlaylists && allPlaylists.length === 0 && (
                         <div className="text-center p-8 border border-dashed rounded-lg">
-                            <p className="text-muted-foreground">No playlists yet. Create your first one!</p>
+                            <p className="text-muted-foreground">Nenhuma playlist criada. Crie sua primeira!</p>
                         </div>
                     )}
                 </div>
@@ -103,12 +119,12 @@ export function Playlists() {
                 {selectedPlaylist ? (
                     <PlaylistDetails
                         playlist={selectedPlaylist}
-                        onAddBook={(book) => handleAddBook(selectedPlaylist.id, book)}
-                        onRemoveBook={(bookId) => handleRemoveBook(selectedPlaylist.id, bookId)}
+                        onAddBook={(book) => handleAddBook(selectedPlaylist.id ?? '', book)}
+                        onRemoveBook={(bookId) => handleRemoveBook(selectedPlaylist.id ?? '', bookId)}
                     />
                 ) : (
                     <div className="flex items-center justify-center h-64 border border-dashed rounded-lg">
-                        <p className="text-muted-foreground">Select a playlist to view details</p>
+                        <p className="text-muted-foreground">Selecione uma playlist para visualizar os detalhes</p>
                     </div>
                 )}
             </div>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Book } from "@/models/book.model";
+import { Book } from "@/app/models/book.model";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 
@@ -14,6 +14,7 @@ export function BookCard({ book, onRemove }: BookCardProps) {
         <Card className="overflow-hidden">
             <div className="aspect-[2/3] relative">
                 <Image
+                    fill
                     src={book.cover || "/placeholder.svg"}
                     alt={`Cover of ${book.title}`}
                     className="object-cover w-full h-full"
