@@ -7,5 +7,6 @@ export interface Book {
     cover: string;
     author?: string;
     description?: string;
+    playlistId?: string;
     playlists?: Playlist[];
 }
