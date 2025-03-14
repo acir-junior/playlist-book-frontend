@@ -1,0 +1,73 @@
+name: Deploy Playlist books frontend
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+    
+        steps:
+            - name: Checkout do código
+              uses: actions/checkout@v3
+
+            - name: Criar pacote para envio
+              run: tar -czf frontend.tar.gz .gitignore Dockerfile docker-compose.yml src package.json tsconfig.json .env.example next.config.js postcss.config.js public
+
+            - name: Enviar pacote para servidor EC2 AWS
+              env: 
+                SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+                EC2_HOST: ${{ secrets.EC2_HOST }}
+                EC2_USER: ${{ secrets.EC2_USER }}
+              run: |
+                printf "%s" "$SSH_PRIVATE_KEY" > private_key.pem
+                chmod 600 private_key.pem
+                scp -i private_key.pem -o StrictHostKeyChecking=no frontend.tar.gz $EC2_USER@$EC2_HOST:/home/$EC2_USER/
+
+            - name: Conectar ao servidor EC2 AWS e configurar frontend
+              env:
+                SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+                EC2_HOST: ${{ secrets.EC2_HOST }}
+                EC2_USER: ${{ secrets.EC2_USER }}
+              run: |
+                ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+
+                # Navegar para o diretório correto
+                cd /home/ubuntu/ || { echo "Erro: Não foi possível acessar /home/ubuntu/"; exit 1; }
+
+                # Verificar se o arquivo foi transferido corretamente
+                if [ ! -f frontend.tar.gz ]; then
+                    echo "Erro: frontend.tar.gz não encontrado!"
+                    exit 1
+                fi
+
+                # Parar e remover containers existentes
+                docker-compose down
+
+                # Remover arquivos antigos e extrair os novos
+                sudo rm -rf frontend
+                sudo mkdir -p /home/ubuntu/frontend
+
+                # Extrair o arquivo tar.gz
+                sudo tar -xzf frontend.tar.gz -C /home/ubuntu/frontend
+
+                # Verificar se o arquivo docker-compose.yml está presente
+                if [ ! -f /home/ubuntu/frontend/docker-compose.yml ]; then
+                    echo "Erro: docker-compose.yml não encontrado!"
+                    exit 1
+                fi
+
+                # Garantir permissões corretas no diretório
+                sudo chown -R $EC2_USER:$EC2_USER /home/ubuntu/frontend
+                sudo chmod -R 755 /home/ubuntu/frontend
+
+                # Criar o .env com as variáveis de ambiente
+                cat <<EOT | sudo tee /home/ubuntu/frontend/.env > /dev/null
+                NEXT_PUBLIC_BACKEND_URL=${{ secrets.BACKEND_URL }}
+                EOT
+
+                # Construir e rodar os containers
+                docker-compose -f /home/ubuntu/frontend/docker-compose.yml up --build -d
+                EOF

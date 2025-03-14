@@ -1,0 +1,20 @@
+services:
+  frontend:
+    container_name: frontend
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - playlist:/app
+    networks:
+      - playlist-network
+      
+volumes:
+  playlist:
+
+networks:
+  playlist-network:
+    driver: bridge
