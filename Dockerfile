@@ -1,26 +1,28 @@
-# Use a imagem oficial do Node.js como base
-FROM node:22-alpine
+# Estágio 1: Build
+FROM node:22-alpine AS build
 
-# Instala o Git, wget
-RUN apk update && \
-    apk add --no-cache git wget
-
-# Defina o diretório de trabalho dentro do container
 WORKDIR /app
-
-# Copie o resto dos arquivos do projeto
-COPY . .
-
-# Instale as dependências do projeto
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Compile o projeto TypeScript
+COPY . .
 RUN npm run build
 
-# RUN mv .env.example .env
+# Limpa arquivos desnecessários
+RUN rm -rf node_modules/.cache
 
-# Exponha a porta que a aplicação vai usar
+# Estágio 2: Produção
+FROM node:22-alpine
+
+WORKDIR /app
+COPY --from=build /app/package.json /app/package-lock.json ./
+RUN npm install --production
+
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
+
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "start"]
+# Comando para rodar a aplicação em produção
+CMD ["npm", "start"]
