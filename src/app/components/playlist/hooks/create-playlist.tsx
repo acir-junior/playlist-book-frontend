@@ -4,7 +4,7 @@ import { requestError, requestSuccess } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 async function createPlaylist(playlist: Playlist) {
-    return PlaylistRequestFactory().save(playlist);
+    return await PlaylistRequestFactory().save(playlist);
 }
 
 export function useCreatePlaylist() {

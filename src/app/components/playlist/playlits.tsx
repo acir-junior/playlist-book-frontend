@@ -12,12 +12,14 @@ import { useAllPlaylists } from "./hooks/all-playlists";
 import { useCreatePlaylist } from "./hooks/create-playlist";
 import { useSaveBook } from "../book/hooks/save-book";
 import { createData } from "@/lib/utils";
+import { useRemoveBook } from "../book/hooks/remove-book";
 
 export function Playlists() {
     const { data: allPlaylists } = useAllPlaylists();
-
     const { mutate: createPlaylist } = useCreatePlaylist();
+
     const { mutate: saveBook } = useSaveBook();
+    const { mutate: deleteBook } = useRemoveBook();
 
     const [playlists, setPlaylists] = useState<Playlist[]>(allPlaylists ?? []);
     const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
@@ -79,6 +81,8 @@ export function Playlists() {
                 books: selectedPlaylist.books ? selectedPlaylist.books.filter((book) => book.id !== bookId) : [],
             });
         }
+
+        deleteBook(bookId);
     }
 
     return (

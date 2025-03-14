@@ -22,7 +22,7 @@ export function PlaylistCard({ playlist, onClick, isSelected }: PlaylistCardProp
             <CardContent>
                 <div className="flex items-center">
                     <Book className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <Badge>{playlist?.books?.length} livros</Badge>
+                    <Badge>{playlist?.books?.length ?? 0} livros</Badge>
                 </div>
             </CardContent>
         </Card>

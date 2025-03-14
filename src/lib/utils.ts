@@ -22,7 +22,7 @@ export function requestSuccess(message: string) {
         resolve();
       },
     });
-  }).then(() => window.location.reload());
+  }).finally(() => window.location.reload());
 }
 
 export function requestError(message: string) {
@@ -32,7 +32,7 @@ export function requestError(message: string) {
         resolve();
       },
     });
-  }).then(() => window.location.reload());
+  }).finally(() => window.location.reload());
 }
 
 export function reloadComponent(navigate: NavigateFunction) {
