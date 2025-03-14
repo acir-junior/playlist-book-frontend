@@ -23,7 +23,7 @@ jobs:
                 EC2_USER: ${{ secrets.EC2_USER }}
               run: |
                 printf "%s" "$SSH_PRIVATE_KEY" > private_key.pem
-                chmod 600 private_key.pem
+                chmod 400 private_key.pem
                 scp -i private_key.pem -o StrictHostKeyChecking=no frontend.tar.gz $EC2_USER@$EC2_HOST:/home/$EC2_USER/
 
             - name: Conectar ao servidor EC2 AWS e configurar frontend
