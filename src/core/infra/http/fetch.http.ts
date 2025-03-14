@@ -3,9 +3,11 @@ import { IRequester } from "./requester.http";
 
 export class FetchHttp implements IRequester {
 
-    api: string = "http://localhost:7000";
+    api: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:7000';
 
     async get<T>(url: string): Promise<T> {
+        console.log(this.api);
+        
         const response = await fetch(`${this.api}/${url}`);
         return response.json();
     }

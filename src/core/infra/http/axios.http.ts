@@ -4,7 +4,7 @@ import { IRequester } from "./requester.http";
 
 export class AxiosHttp implements IRequester {
     app: any;
-    api: string = "http://localhost:7000";
+    api: string = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'http://localhost:7000';
 
     constructor() {
         this.app = axios.create();
