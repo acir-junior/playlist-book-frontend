@@ -17,8 +17,8 @@ export class BookService implements IRepository<Book> {
         return this._requester.put<void>("v1/book/update", model);
     }
 
-    delete(model: Book): Promise<void> {
-        return this._requester.delete<void>(`v1/book/delete/${model.id}`);
+    delete(id: string): Promise<void> {
+        return this._requester.delete<void>(`v1/book/delete/${id}`);
     }
 
     findById(id: string): Promise<Book> {

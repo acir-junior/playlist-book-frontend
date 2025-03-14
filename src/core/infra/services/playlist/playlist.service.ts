@@ -16,8 +16,8 @@ export class PlaylistService implements IRepository<Playlist> {
         return this._requester.put<void>("v1/playlist/update", model);
     }
 
-    delete(model: Playlist): Promise<void> {
-        return this._requester.delete<void>(`v1/playlist/delete/${model.id}`);
+    delete(id: string): Promise<void> {
+        return this._requester.delete<void>(`v1/playlist/delete/${id}`);
     }
 
     findById(id: string): Promise<Playlist> {
