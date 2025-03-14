@@ -55,6 +55,7 @@ Este é um projeto frontend desenvolvido com **Next.js**, utilizando conceitos d
 - **Jest** - Testes unitários.
 - **ESLint e Prettier** - Padronização de código.
 - **Docker** - Containeração para desenvolvimento e produção.
+- **Shadcn.ui** - Biblioteca para criação de componentes já estilizados.
 
 ## Estrutura das Pastas
 
