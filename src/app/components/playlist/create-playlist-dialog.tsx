@@ -1,4 +1,4 @@
-import { PlaylistCreate } from "@/models/playlist.model";
+import { PlaylistCreate } from "@/app/models/playlist.model";
 import { useForm } from "react-hook-form";
 import { CreatePlaylist, createPlaylistSchema } from "./schema/create-playlist.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,7 +47,7 @@ export function CreatePlaylistDialog({ open, onOpenChange, onCreate }: CreatePla
                             <Input
                                 type="text"
                                 id="title"
-                                placeholder="My favorite books"
+                                placeholder="Meus livros favoritos"
                                 { ...register("title") }
                             />
                             {  errors.title && <p className="text-sm text-red-500">{errors.title.message}</p> }
@@ -57,7 +57,7 @@ export function CreatePlaylistDialog({ open, onOpenChange, onCreate }: CreatePla
                             <Input
                                 type="text"
                                 id="author"
-                                placeholder="My favorite books"
+                                placeholder="O melhor autor do mundo"
                                 { ...register("author") }
                             />
                             {  errors.author && <p className="text-sm text-red-500">{errors.author.message}</p> }
@@ -66,7 +66,7 @@ export function CreatePlaylistDialog({ open, onOpenChange, onCreate }: CreatePla
                             <Label htmlFor="description">Descrição</Label>
                             <Textarea
                                 id="description"
-                                placeholder="A collection of books that I love..."
+                                placeholder="Uma coleção de livros que eu amo..."
                                 rows={3}
                                 { ...register("description") }
                             />

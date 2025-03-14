@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Playlist } from "@/models/playlist.model";
-import { Badge, Book } from "lucide-react";
+import { Playlist } from "@/app/models/playlist.model";
+import { Book } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface PlaylistCardProps {
     playlist: Playlist;
@@ -21,7 +22,7 @@ export function PlaylistCard({ playlist, onClick, isSelected }: PlaylistCardProp
             <CardContent>
                 <div className="flex items-center">
                     <Book className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <Badge>{playlist.books.length} books</Badge>
+                    <Badge>{playlist?.books?.length ?? 0} livros</Badge>
                 </div>
             </CardContent>
         </Card>
