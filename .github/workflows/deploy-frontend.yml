@@ -14,7 +14,7 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Criar pacote para envio
-              run: tar -czf frontend.tar.gz .gitignore Dockerfile docker-compose.yml src package.json tsconfig.json .env.example next.config.js postcss.config.js public
+              run: tar -czf frontend.tar.gz .gitignore Dockerfile docker-compose.yml src package.json tsconfig.json .env.example next.config.ts postcss.config.mjs public tailwind.config.ts
 
             - name: Enviar pacote para servidor EC2 AWS
               env: 
