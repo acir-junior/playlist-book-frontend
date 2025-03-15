@@ -6,7 +6,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
-ENV NEXT_BUILD_WORKERS=2
+ENV NEXT_BUILD_WORKERS=1
 RUN npm run build
 
 # Limpa arquivos desnecessários
