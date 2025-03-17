@@ -19,10 +19,11 @@ WORKDIR /app
 COPY --from=build /app/package.json /app/package-lock.json ./
 RUN npm install --production
 
+COPY --from=build /app/next.config.ts ./
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
-COPY --from=build /app/next.config.js ./
+COPY --from=build /app/node_modules ./node_modules
 
 EXPOSE 3000
 
