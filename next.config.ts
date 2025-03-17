@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'books.google.com',
         pathname: '/books/content/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'books.google.com',
+        pathname: '/books/content/**',
+      },
     ],
   },
   output: "standalone",
