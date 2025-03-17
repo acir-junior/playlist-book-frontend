@@ -22,6 +22,7 @@ RUN npm install --production
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.js ./
 
 EXPOSE 3000
 
