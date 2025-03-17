@@ -70,6 +70,7 @@ export function AddBookDialog({ open, onOpenChange, onAddBook }: AddBookDialogPr
                                         className="w-12 h-16 object-cover"
                                         width={500}
                                         height={300}
+                                        quality={100}
                                     />
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium truncate">{book.title}</p>

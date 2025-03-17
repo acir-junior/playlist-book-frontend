@@ -44,7 +44,7 @@ jobs:
                 fi
 
                 # Parar e remover containers existentes
-                docker-compose down frontend -v
+                docker-compose -f /home/ubuntu/frontend/docker-compose.yml down -v
 
                 # Remover arquivos antigos e extrair os novos
                 sudo rm -rf frontend

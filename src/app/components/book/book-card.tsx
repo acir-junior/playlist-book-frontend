@@ -19,6 +19,7 @@ export function BookCard({ book, onRemove }: BookCardProps) {
                     src={book.cover}
                     alt={`Cover of ${book.title}`}
                     className="object-cover w-full h-full"
+                    quality={100}
                 />
             </div>
             <CardContent className="p-4">
