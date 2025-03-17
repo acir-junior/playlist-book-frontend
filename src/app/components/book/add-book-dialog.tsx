@@ -5,9 +5,8 @@ import { Book } from "@/app/models/book.model";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchBooks } from "./hooks/search-books";
-import { TruncateTooltip } from "../helpers/truncate-tooltip";
 import { GoogleBooks } from "@/app/models/google-books.model";
-import { createData } from "@/lib/utils";
+import { createData, truncateString } from "@/lib/utils";
 import Image from "next/image";
 
 interface AddBookDialogProps {
@@ -76,7 +75,7 @@ export function AddBookDialog({ open, onOpenChange, onAddBook }: AddBookDialogPr
                                         <p className="font-medium truncate">{book.title}</p>
                                         <p className="text-sm text-muted-foreground truncate">{book.author}</p>
                                         <p className="text-xs text-muted-foreground">
-                                            <TruncateTooltip text={book.description ?? ''} length={150} />
+                                            { truncateString(book.description ?? "", 150) }
                                         </p>
                                     </div>
                                     <Button size="sm" variant="ghost" className="ml-auto">

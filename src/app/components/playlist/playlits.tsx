@@ -15,24 +15,26 @@ import { createData } from "@/lib/utils";
 import { useRemoveBook } from "../book/hooks/remove-book";
 
 export function Playlists() {
-    const { data: allPlaylists } = useAllPlaylists();
+    const { data: allPlaylists, refetch: getPlaylists } = useAllPlaylists();
     const { mutate: createPlaylist } = useCreatePlaylist();
 
     const { mutate: saveBook } = useSaveBook();
     const { mutate: deleteBook } = useRemoveBook();
 
-    const [playlists, setPlaylists] = useState<Playlist[]>(allPlaylists ?? []);
     const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
     const [isCreatingDialogOpen, setIsCreatingDialogOpen] = useState(false);
 
     function handleCreatePlaylist(playlist: PlaylistCreate) {
-        const newPlaylist: Playlist = {
+        const newPlaylist = createData<Playlist>({
             ...playlist,
-        }
-        setPlaylists([...playlists, newPlaylist]);
-        setIsCreatingDialogOpen(false);
+        });
 
-        createPlaylist(playlist);
+        createPlaylist(newPlaylist, {
+            onSuccess: () => {
+                getPlaylists();
+                setIsCreatingDialogOpen(false);
+            },
+        });
     }
 
     function handleAddBook(playlistId: string, book: Book) {
@@ -40,41 +42,32 @@ export function Playlists() {
             ...book,
             playlistId: playlistId,
         });
-        saveBook(newBook);
-
-        setPlaylists(
-            playlists.map((playlist) => {
-                if (playlist.id === playlistId) {
-                    return {
-                        ...playlist,
-                        books: [...playlist.books ?? [], book],
-                    };
-                }
-                return playlist;
-            })
-        )
-
+        
+        saveBook(newBook, {
+            onSuccess: () => {
+                getPlaylists().then((updatedPlaylists) => {
+                    if (updatedPlaylists.data) {
+                        const updatedPlaylist = updatedPlaylists.data.find(
+                            (playlist) => playlist.id === playlistId
+                        );
+    
+                        if (updatedPlaylist) {
+                            setSelectedPlaylist(updatedPlaylist);
+                        }
+                    }
+                })
+            },
+        });
+        
         if (selectedPlaylist?.id === playlistId) {
             setSelectedPlaylist({
                 ...selectedPlaylist,
-                books: [...selectedPlaylist.books!, book],
+                books: [...selectedPlaylist.books ?? [], book],
             });
         }
     }
 
     function handleRemoveBook(playlistId: string, bookId: string) {
-        setPlaylists(
-            playlists.map((playlist) => {
-                if (playlist.id === playlistId) {
-                    return {
-                        ...playlist,
-                        books: playlist.books ? playlist.books.filter((book) => book.id !== bookId) : [],
-                    };
-                }
-                return playlist;
-            })
-        )
-
         if (selectedPlaylist?.id === playlistId) {
             setSelectedPlaylist({
                 ...selectedPlaylist,
@@ -82,7 +75,9 @@ export function Playlists() {
             });
         }
 
-        deleteBook(bookId);
+        deleteBook(bookId, {
+            onSuccess: () => getPlaylists(),
+        });
     }
 
     return (

@@ -16,7 +16,7 @@ interface PlaylistDetailsProps {
 
 export function PlaylistDetails({ playlist, onAddBook, onRemoveBook }: PlaylistDetailsProps) {
     const [isAddBookDialogOpen, setIsAddBookDialogOpen] = useState(false);
-
+    
     return (
         <Card>
             <CardHeader>
