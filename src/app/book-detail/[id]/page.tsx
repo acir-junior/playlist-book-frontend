@@ -6,15 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 
-type BookDetailPageParams = {
-    id: string;
-}
-
 async function searchBookById(id: string) {
     return await BookRequestFactory().findById(id);
 }
 
-export default function BookDetailPage({ params }: { params: BookDetailPageParams }) {
+export default function BookDetailPage({ params }: { params: { id: string } }) {
     const { id } = params;
     const book = use(searchBookById(id));
 
