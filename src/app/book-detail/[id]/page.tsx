@@ -86,7 +86,7 @@ export default function BookDetailPage({ params }: BookDetailPageParams) {
 
                 <div className="md:col-span-2">
                     <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
-                    <p className="text-xl text-muted-foreground mb-2">by {book.author}</p>
+                    <p className="text-xl text-muted-foreground mb-2">por {book.author}</p>
 
                     <div className="prose max-w-none">
                         <h2 className="text-xl font-semibold mb-4">Descrição</h2>

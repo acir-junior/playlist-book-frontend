@@ -82,7 +82,7 @@ export function Playlists() {
     }
 
     return (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
             <div className="md:col-span-1">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Suas Playlists</h2>
@@ -92,7 +92,7 @@ export function Playlists() {
                     </Button>
                 </div>
 
-                <ScrollArea className="h-[calc(100vh-270px)] min-h-[300px] pr-4">
+                <ScrollArea className="h-auto md:h-[calc(100vh-270px)] min-h-[300px] pr-4">
                     <div className="space-y-4 pb-2">
                         {allPlaylists && allPlaylists.map((playlist) => (
                             <PlaylistCard
