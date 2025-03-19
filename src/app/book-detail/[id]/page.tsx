@@ -60,7 +60,7 @@ export default function BookDetailPage({ params }: BookDetailPageParams) {
                         <div className="aspect-[3/4] relative rounded-lg overflow-hidden shadow-lg">
                             <Image
                                 fill
-                                src={book.cover || "/placeholder.svg"}
+                                src={book.cover}
                                 alt={`Cover of ${book.title}`}
                                 className="object-cover w-full h-full"
                             />

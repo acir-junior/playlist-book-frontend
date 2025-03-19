@@ -13,6 +13,7 @@ import { useCreatePlaylist } from "./hooks/create-playlist";
 import { useSaveBook } from "../book/hooks/save-book";
 import { createData } from "@/lib/utils";
 import { useRemoveBook } from "../book/hooks/remove-book";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function Playlists() {
     const { data: allPlaylists, refetch: getPlaylists } = useAllPlaylists();
@@ -90,22 +91,25 @@ export function Playlists() {
                         Nova Playlist
                     </Button>
                 </div>
-                <div className="space-y-4">
-                    {allPlaylists && allPlaylists.map((playlist) => (
-                        <PlaylistCard
-                            key={playlist.id}
-                            playlist={playlist}
-                            onClick={() => setSelectedPlaylist(playlist)}
-                            isSelected={selectedPlaylist?.id === playlist.id}
-                        />
-                    ))}
 
-                    {allPlaylists && allPlaylists.length === 0 && (
-                        <div className="text-center p-8 border border-dashed rounded-lg">
-                            <p className="text-muted-foreground">Nenhuma playlist criada. Crie sua primeira!</p>
-                        </div>
-                    )}
-                </div>
+                <ScrollArea className="h-[calc(100vh-270px)] min-h-[300px] pr-4">
+                    <div className="space-y-4 pb-2">
+                        {allPlaylists && allPlaylists.map((playlist) => (
+                            <PlaylistCard
+                                key={playlist.id}
+                                playlist={playlist}
+                                onClick={() => setSelectedPlaylist(playlist)}
+                                isSelected={selectedPlaylist?.id === playlist.id}
+                            />
+                        ))}
+
+                        {allPlaylists && allPlaylists.length === 0 && (
+                            <div className="text-center p-8 border border-dashed rounded-lg">
+                                <p className="text-muted-foreground">Nenhuma playlist criada. Crie sua primeira!</p>
+                            </div>
+                        )}
+                    </div>
+                </ScrollArea>
 
                 <CreatePlaylistDialog
                     open={isCreatingDialogOpen}
