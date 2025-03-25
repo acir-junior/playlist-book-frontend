@@ -5,16 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { franc } from "franc";
 import { Type } from "lucide-react";
-import { ThreeDot } from "react-loading-indicators";
 import { useTranslateDescription } from "../book/hooks/translate-description";
 import { useState } from "react";
+import { Loading } from "@/components/ui/loading";
 
 type DetectLangDescriptionProps = {
     book: Book;
     description: string;
 }
-
-const loading = () => <ThreeDot color="#000" size="medium" text="" textColor="" />
 
 export function DetectLangDescription({ book, description }: DetectLangDescriptionProps) {
     const [descriptionTranslated, setDescriptionTranslated] = useState<string | null>(null);
@@ -28,8 +26,8 @@ export function DetectLangDescription({ book, description }: DetectLangDescripti
 
     async function translate() {
         translateDescription({ ...book, description }, {
-            onSuccess: (data: Book) => {
-                setDescriptionTranslated(data.description ?? '');
+            onSuccess: (response: { data: string }) => {
+                setDescriptionTranslated(response.data ?? '');
             }
         });
     }
@@ -60,7 +58,7 @@ export function DetectLangDescription({ book, description }: DetectLangDescripti
                     </TooltipProvider>
                 )}
             </div>
-            {isPending ? loading() : (
+            {isPending ? <Loading /> : (
                 <p className="whitespace-pre-line">
                     {descriptionTranslated || description}
                 </p>

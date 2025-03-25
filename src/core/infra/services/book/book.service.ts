@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Book } from "@/app/models/book.model";
 import { IRequester } from "../../http/requester.http";
 import { IRepository } from "../../repository/repository";
@@ -33,7 +34,7 @@ export class BookService implements IRepository<Book> {
         return this._requester.get(`v1/book/search-book/${param}`);
     }
 
-    translateDescriptionBook(model: Book): Promise<Book> {
+    translateDescriptionBook(model: Book): Promise<any> {
         return this._requester.put<Book>(`v1/book/update-description/${model.id}`, model);
     }
 }
