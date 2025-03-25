@@ -14,7 +14,7 @@ export class BookService implements IRepository<Book> {
     }
 
     update(model: Book): Promise<void> {
-        return this._requester.put<void>("v1/book/update", model);
+        return this._requester.put<void>(`v1/book/update/${model.id}`, model);
     }
 
     delete(id: string): Promise<void> {
@@ -31,5 +31,9 @@ export class BookService implements IRepository<Book> {
 
     findBook(param: string): Promise<GoogleBooks[]> {
         return this._requester.get(`v1/book/search-book/${param}`);
+    }
+
+    translateDescriptionBook(model: Book): Promise<Book> {
+        return this._requester.put<Book>(`v1/book/update-description/${model.id}`, model);
     }
 }

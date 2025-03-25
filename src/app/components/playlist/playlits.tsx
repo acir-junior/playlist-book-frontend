@@ -14,10 +14,12 @@ import { useSaveBook } from "../book/hooks/save-book";
 import { createData } from "@/lib/utils";
 import { useRemoveBook } from "../book/hooks/remove-book";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useDeletePlaylist } from "./hooks/delete-playlist";
 
 export function Playlists() {
     const { data: allPlaylists, refetch: getPlaylists } = useAllPlaylists();
     const { mutate: createPlaylist } = useCreatePlaylist();
+    const { mutate: deletePlaylist } = useDeletePlaylist();
 
     const { mutate: saveBook } = useSaveBook();
     const { mutate: deleteBook } = useRemoveBook();
@@ -35,6 +37,16 @@ export function Playlists() {
                 getPlaylists();
                 setIsCreatingDialogOpen(false);
             },
+        });
+    }
+
+    function handleDeletePlaylist(playlistId: string) {
+        if (selectedPlaylist?.id === playlistId) {
+            setSelectedPlaylist(null);
+        }
+
+        deletePlaylist(playlistId, {
+            onSuccess: () => getPlaylists(),
         });
     }
 
@@ -86,7 +98,11 @@ export function Playlists() {
             <div className="md:col-span-1">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Suas Playlists</h2>
-                    <Button onClick={() => setIsCreatingDialogOpen(true)} size="sm">
+                    <Button 
+                        onClick={() => setIsCreatingDialogOpen(true)} 
+                        size="sm"
+                        id="open-dialog-create-playlist"
+                    >
                         <Plus className="h-4 w-4 mr-2" />
                         Nova Playlist
                     </Button>
@@ -99,6 +115,7 @@ export function Playlists() {
                                 key={playlist.id}
                                 playlist={playlist}
                                 onClick={() => setSelectedPlaylist(playlist)}
+                                onDelete={() => handleDeletePlaylist(playlist.id ?? '')}
                                 isSelected={selectedPlaylist?.id === playlist.id}
                             />
                         ))}

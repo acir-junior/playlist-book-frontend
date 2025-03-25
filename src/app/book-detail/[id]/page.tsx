@@ -3,6 +3,7 @@ import { BookRequestFactory } from "@/core/factories/book.factory";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { DetectLangDescription } from "@/app/components/helpers/detect-lang-description";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -88,10 +89,10 @@ export default function BookDetailPage({ params }: BookDetailPageParams) {
                     <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
                     <p className="text-xl text-muted-foreground mb-2">por {book.author}</p>
 
-                    <div className="prose max-w-none">
-                        <h2 className="text-xl font-semibold mb-4">Descrição</h2>
-                        <p className="whitespace-pre-line">{book.description}</p>
-                    </div>
+                    <DetectLangDescription
+                        book={book}
+                        description={book.description ?? ''}
+                    />
                 </div>
             </div>
         </div>

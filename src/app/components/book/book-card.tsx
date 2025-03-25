@@ -35,7 +35,7 @@ export function BookCard({ book, onRemove, showDetails = true }: BookCardProps) 
             </div>
             <CardContent className="p-4">
                 <h3 className="font-semibold line-clamp-1">
-                    <TruncateTooltip text={book.title} length={15} />
+                    <TruncateTooltip text={book.title} length={13} />
                 </h3>
                 <p className="text-sm text-muted-foreground">{book.author}</p>
             </CardContent>
