@@ -16,23 +16,11 @@ export function createData<T>(data: T) {
 }
 
 export function requestSuccess(message: string) {
-  return new Promise<void>((resolve) => {
-    toast.success(message, {
-      onDismiss: () => {
-        resolve();
-      },
-    });
-  }).finally(() => window.location.reload());
+  return toast.success(message);
 }
 
 export function requestError(message: string) {
-  return new Promise<void>((resolve) => {
-    toast.error(message, {
-      onDismiss: () => {
-        resolve();
-      },
-    });
-  }).finally(() => window.location.reload());
+  return toast.error(message);
 }
 
 export function reloadComponent(navigate: NavigateFunction) {
