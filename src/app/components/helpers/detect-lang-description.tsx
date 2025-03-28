@@ -24,6 +24,10 @@ export function DetectLangDescription({ book, description }: DetectLangDescripti
         return languageCode;
     }
 
+    function showTranslateButton(): boolean {
+        return language() !== 'por' && descriptionTranslated === null;
+    }
+
     async function translate() {
         translateDescription({ ...book, description }, {
             onSuccess: (response: { data: string }) => {
@@ -36,7 +40,7 @@ export function DetectLangDescription({ book, description }: DetectLangDescripti
         <div className="prose max-w-none">
             <div className="flex justify-between">
                 <h2 className="text-xl font-semibold mb-4">Descrição</h2>
-                {language() === 'por' ? '' : (
+                {showTranslateButton() && (
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
